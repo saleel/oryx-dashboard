@@ -11,6 +11,7 @@ import theme from './theme';
 import Layout from './layout';
 import Home from './home';
 import EntityPage from './pages/entity';
+import ItemCreatePage from './pages/item-create';
 import EntityCreatePage from './pages/entity-create';
 
 
@@ -24,9 +25,16 @@ function App() {
 
             <Switch>
 
-              <Route path="/:schemaId/new">
+              <Route path="/entity/new">
                 <Layout>
                   <EntityCreatePage />
+                </Layout>
+              </Route>
+
+
+              <Route path="/:schemaId/new">
+                <Layout>
+                  <ItemCreatePage />
                 </Layout>
               </Route>
 

@@ -14,7 +14,6 @@ import TableRow from '@material-ui/core/TableRow';
 import {
   makeStyles,
 } from '@material-ui/core';
-import clsx from 'clsx';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -26,6 +25,16 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
+  },
+  content: {
+    padding: 0,
+  },
+  tableRow: {
+    // height: '3rem',
+  },
+  tableCell: {
+    padding: '1rem',
+    minHeight: '1rem',
   },
 }));
 
@@ -74,9 +83,7 @@ function EntityList(props) {
 
 
   return (
-    <Card
-      className={clsx(classes.root)}
-    >
+    <Card className={classes.root}>
       <CardContent className={classes.content}>
         <div className={classes.inner}>
           <Table>
@@ -97,7 +104,7 @@ function EntityList(props) {
                   key={item.id}
                 >
                   {Object.keys(properties).map((key) => (
-                    <TableCell>{item[key]}</TableCell>
+                    <TableCell className={classes.tableCell}>{item[key]}</TableCell>
                   ))}
                 </TableRow>
               ))}

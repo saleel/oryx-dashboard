@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     // fontWeight: theme.typography.fontWeightMedium,
   },
   searchInput: {
-    height: '3rem',
+    height: '2rem',
     marginBottom: theme.spacing(2),
     maxWidth: '30rem',
   },
@@ -76,8 +76,9 @@ function EntityPage() {
           className={classes.button}
           variant="contained"
           href={`${schemaId}/new`}
+          size="large"
         >
-          Create
+          Add
           {' '}
           {title}
         </Button>
@@ -87,7 +88,7 @@ function EntityPage() {
 
       <SearchInput
         className={classes.searchInput}
-        placeholder="Search user"
+        placeholder={`Search ${title}`}
       />
 
       <EntityList

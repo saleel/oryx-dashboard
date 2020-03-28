@@ -10,10 +10,16 @@ class DataManager {
     this.getSchema = this.getSchema.bind(this);
     this.findSchemas = this.findSchemas.bind(this);
     this.createEntity = this.createEntity.bind(this);
+    this.createSchema = this.createSchema.bind(this);
   }
 
   async getSchema(schemaId) {
     const response = await this.axios.get(`/schemas/${schemaId}`);
+    return response.data;
+  }
+
+  async createSchema(data) {
+    const response = await this.axios.post('/schemas/', data);
     return response.data;
   }
 

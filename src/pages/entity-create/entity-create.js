@@ -23,27 +23,69 @@ const useStyles = makeStyles((theme) => ({
 
 function EntityCreatePage() {
   const classes = useStyles();
-  const { schemaId } = useParams();
   const history = useHistory();
 
-  const { getSchema, createEntity } = React.useContext(StoreContext);
+  const { createSchema } = React.useContext(StoreContext);
 
-  const [schema, { isFetching }] = usePromise(() => getSchema(schemaId), {
-    dependencies: [schemaId],
-  });
+  const schema = {
+    type: 'object',
+    required: ['title', 'description'],
+    properties: {
+      title: { type: 'string', title: 'Title', description: 'Name of the Entity' },
+      description: { type: 'string', title: 'Description', description: 'Description of the Entity' },
+      properties: {
+        type: 'array',
+        title: 'Properties',
+        minLength: 1,
+        items: {
+          type: 'object',
+          properties: {
+            key: { type: 'string', title: 'Key', description: 'Unique key for this property' },
+            title: { type: 'string', title: 'Title', description: 'Name of the Entity' },
+            description: { type: 'string', title: 'Description', description: 'Description of the Entity' },
+            type: {
+              type: 'string',
+              title: 'Type',
+              description: 'Type of the property',
+              enum: [
+                'string', 'number',
+              ],
+            },
+          },
+        },
+      },
+    },
+  };
+
+  const uiSchema = {
+    properties: {
+      items: {
+        key: {
+          classNames: 'MuiGrid-spacing-md-4',
+        },
+      },
+    },
+  };
 
 
   async function handleSubmit(data) {
-    await createEntity({ schemaId, data });
-    history.push(`/${schemaId}`);
+    const id = data.title.split(' ').join('_').toLowerCase();
+
+    const properties = data.properties.reduce((acc, prop) => {
+      const { key, ...rest } = prop;
+      return { ...acc, [key]: { ...rest } };
+    }, {});
+
+    const tranformedData = {
+      id,
+      ...data,
+      properties,
+    };
+
+    await createSchema(tranformedData);
+
+    history.push(`/${id}`);
   }
-
-
-  if (isFetching || !schema) {
-    return <CircularProgress />;
-  }
-
-  const { title } = schema;
 
 
   return (
@@ -52,15 +94,14 @@ function EntityCreatePage() {
       <div className={classes.toolbar}>
 
         <Typography variant="h4">
-          Create new
-          {' '}
-          {title}
+          Create new Entity
         </Typography>
 
       </div>
 
       <EntityEditForm
         schema={schema}
+        uiSchema={uiSchema}
         onSubmit={handleSubmit}
       />
 

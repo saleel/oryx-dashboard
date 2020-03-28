@@ -5,11 +5,17 @@ import PropTypes from 'prop-types';
 import Card from '@material-ui/core/Card';
 import Button from '@material-ui/core/Button';
 import CardContent from '@material-ui/core/CardContent';
-import TextField from '@material-ui/core/TextField';
+import Box from '@material-ui/core/Box';
 import {
   makeStyles,
 } from '@material-ui/core';
 import clsx from 'clsx';
+import { withTheme } from 'react-jsonschema-form';
+import { Theme as MuiTheme } from 'rjsf-material-ui';
+import pick from 'lodash/pick';
+
+
+const Form = withTheme(MuiTheme);
 
 
 const useStyles = makeStyles((theme) => ({
@@ -28,39 +34,29 @@ const useStyles = makeStyles((theme) => ({
 
 function EntityEditForm(props) {
   const {
-    schema, onSubmit, onDelete, values: defaultValues,
+    schema, uiSchema, onSubmit, values,
   } = props;
 
 
   const classes = useStyles();
 
-  const [value, setValue] = React.useState(defaultValues);
+  // const [value, setValue] = React.useState(defaultValues);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
 
-  async function handleSubmit(e) {
-    e.preventDefault();
-
+  async function handleSubmit({ formData }) {
     if (isSubmitting) {
       return;
     }
 
     setIsSubmitting(true);
     try {
-      await onSubmit(value);
+      await onSubmit(formData);
     } catch (error) {
       // eslint-disable-next-line no-alert
       window.alert(error.message);
     }
   }
-
-
-  function onChange(key, v) {
-    setIsSubmitting(false);
-    setValue((existing) => ({ ...existing, [key]: v }));
-  }
-
-  const { properties } = schema;
 
 
   return (
@@ -70,29 +66,20 @@ function EntityEditForm(props) {
       <CardContent className={classes.content}>
         <div className={classes.inner}>
 
-          <form onSubmit={handleSubmit}>
-            {Object.keys(properties).map((key) => (
-              <div key={key}>
-                <TextField
-                  required
-                  className={classes.input}
-                  label={properties[key].title}
-                  variant="outlined"
-                  onChange={(e) => onChange(key, e.target.value)}
-                />
-              </div>
-            ))}
-
-            <Button
-              color="primary"
-              variant="contained"
-              disabled={isSubmitting}
-              onClick={handleSubmit}
-            >
-              Submit
-            </Button>
-
-          </form>
+          <Form
+            schema={pick(schema, ['properties', 'required'])}
+            uiSchema={uiSchema}
+            // onChange={log('changed')}
+            formData={values}
+            onSubmit={handleSubmit}
+          // onError={log('errors')}
+          >
+            <Box mt={3}>
+              <Button variant="contained" size="large" color="primary" type="submit">
+                Submit
+              </Button>
+            </Box>
+          </Form>
 
         </div>
       </CardContent>
@@ -107,10 +94,13 @@ EntityEditForm.propTypes = {
     properties: PropTypes.shape({}),
   }).isRequired,
   onSubmit: PropTypes.func.isRequired,
+  uiSchema: PropTypes.shape({}),
 };
 
 
 EntityEditForm.defaultProps = {
+  uiSchema: {},
 };
+
 
 export default EntityEditForm;
