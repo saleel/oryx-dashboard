@@ -1,14 +1,9 @@
 import React from 'react';
 import { makeStyles, Typography } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import clsx from 'clsx';
 import StoreContext from '../../contexts/store-context';
-import usePromise from '../../hooks/use-promise';
-import EntityList from '../../components/entity-list';
-import SearchInput from '../../components/search-input';
-import EntityEditForm from '../../components/entity-edit-form';
+import ItemEditForm from '../../components/item-edit-form';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -25,13 +20,15 @@ function EntityCreatePage() {
   const classes = useStyles();
   const history = useHistory();
 
-  const { createSchema } = React.useContext(StoreContext);
+  const { createEntity } = React.useContext(StoreContext);
 
   const schema = {
     type: 'object',
-    required: ['title', 'description'],
+    required: ['name', 'pluralName', 'description', 'properties'],
     properties: {
-      title: { type: 'string', title: 'Title', description: 'Name of the Entity' },
+      name: { type: 'string', title: 'Name', description: 'Singular name of the Entity' },
+      pluralName: { type: 'string', title: 'Plural Name', description: 'Pluralized version of the name' },
+      // id: { type: 'string', title: 'ID', description: 'ID of the Entity' },
       description: { type: 'string', title: 'Description', description: 'Description of the Entity' },
       properties: {
         type: 'array',
@@ -41,8 +38,8 @@ function EntityCreatePage() {
           type: 'object',
           properties: {
             key: { type: 'string', title: 'Key', description: 'Unique key for this property' },
-            title: { type: 'string', title: 'Title', description: 'Name of the Entity' },
-            description: { type: 'string', title: 'Description', description: 'Description of the Entity' },
+            title: { type: 'string', title: 'Title', description: 'Label/Name of the property' },
+            description: { type: 'string', title: 'Description', description: 'Description of the property' },
             type: {
               type: 'string',
               title: 'Type',
@@ -69,20 +66,27 @@ function EntityCreatePage() {
 
 
   async function handleSubmit(data) {
-    const id = data.title.split(' ').join('_').toLowerCase();
+    const { name, pluralName, description } = data;
+
+    const id = name.split(' ').join('_').toLowerCase();
 
     const properties = data.properties.reduce((acc, prop) => {
       const { key, ...rest } = prop;
       return { ...acc, [key]: { ...rest } };
     }, {});
 
-    const tranformedData = {
+    const transformedData = {
       id,
-      ...data,
-      properties,
+      name,
+      pluralName,
+      schema: {
+        title: name,
+        description,
+        properties,
+      },
     };
 
-    await createSchema(tranformedData);
+    await createEntity(transformedData);
 
     history.push(`/${id}`);
   }
@@ -92,14 +96,12 @@ function EntityCreatePage() {
     <div className={clsx(classes.root)}>
 
       <div className={classes.toolbar}>
-
         <Typography variant="h4">
           Create new Entity
         </Typography>
-
       </div>
 
-      <EntityEditForm
+      <ItemEditForm
         schema={schema}
         uiSchema={uiSchema}
         onSubmit={handleSubmit}

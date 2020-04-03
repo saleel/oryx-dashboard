@@ -1,26 +1,22 @@
 import React from 'react';
-import {
-  makeStyles,
-} from '@material-ui/core';
-import StoreContext from './contexts/store-context';
-import usePromise from './hooks/use-promise';
+// import StoreContext from './contexts/store-context';
+// import usePromise from './hooks/use-promise';
 
 
 function Home() {
-  const { findSchemas } = React.useContext(StoreContext);
+  // const { findEntities } = React.useContext(StoreContext);
 
-  const [schemas] = usePromise(() => findSchemas(), {
-    defaultValue: [],
-  });
+  // const [entities] = usePromise(() => findEntities(), {
+  //   defaultValue: [],
+  // });
 
-  if (!schemas.length) return null;
+  // if (!entities.length) return null;
 
 
   return (
     <div>
 
       Home page
-
 
     </div>
   );

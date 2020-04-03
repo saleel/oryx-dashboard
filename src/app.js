@@ -31,19 +31,17 @@ function App() {
                 </Layout>
               </Route>
 
-
-              <Route path="/:schemaId/new">
+              <Route path="/:entityId/new">
                 <Layout>
                   <ItemCreatePage />
                 </Layout>
               </Route>
 
-              <Route path="/:schemaId">
+              <Route path="/:entityId">
                 <Layout>
                   <EntityPage />
                 </Layout>
               </Route>
-
 
               <Route path="/">
                 <Layout>

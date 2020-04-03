@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
  * Renders list of entities based on the data returned from getData
  * @param {{ schema: Object, getData: Function, pageLimit: number }} props
  */
-function EntityList(props) {
+function ItemList(props) {
   const {
     schema, getData, pageLimit = 10,
   } = props;
@@ -130,7 +130,7 @@ function EntityList(props) {
 }
 
 
-EntityList.propTypes = {
+ItemList.propTypes = {
   schema: PropTypes.shape({
     properties: PropTypes.shape({}),
   }).isRequired,
@@ -139,8 +139,8 @@ EntityList.propTypes = {
 };
 
 
-EntityList.defaultProps = {
+ItemList.defaultProps = {
   pageLimit: 10,
 };
 
-export default EntityList;
+export default ItemList;

@@ -7,34 +7,34 @@ class DataManager {
     });
 
     this.findEntities = this.findEntities.bind(this);
-    this.getSchema = this.getSchema.bind(this);
-    this.findSchemas = this.findSchemas.bind(this);
+    this.getEntity = this.getEntity.bind(this);
     this.createEntity = this.createEntity.bind(this);
-    this.createSchema = this.createSchema.bind(this);
+    this.findItems = this.findItems.bind(this);
+    this.createItem = this.createItem.bind(this);
   }
 
-  async getSchema(schemaId) {
-    const response = await this.axios.get(`/schemas/${schemaId}`);
+  async getEntity(entityId) {
+    const response = await this.axios.get(`/entities/${entityId}`);
     return response.data;
   }
 
-  async createSchema(data) {
-    const response = await this.axios.post('/schemas/', data);
+  async createEntity(data) {
+    const response = await this.axios.post('/entities/', data);
     return response.data;
   }
 
-  async findSchemas() {
-    const response = await this.axios.get('/schemas');
+  async findEntities() {
+    const response = await this.axios.get('/entities');
     return response.data;
   }
 
-  async findEntities({ schemaId, ...rest }) {
-    const response = await this.axios.get(`/${schemaId}`, { params: rest });
+  async findItems({ entityId, ...rest }) {
+    const response = await this.axios.get(`/${entityId}`, { params: rest });
     return response.data;
   }
 
-  async createEntity({ schemaId, data }) {
-    const response = await this.axios.post(`/${schemaId}`, data);
+  async createItem({ entityId, data }) {
+    const response = await this.axios.post(`/${entityId}`, data);
     return response.data;
   }
 }

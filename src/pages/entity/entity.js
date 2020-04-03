@@ -1,14 +1,13 @@
 import React from 'react';
-import { useParams, NavLink } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import clsx from 'clsx';
-import { makeStyles, colors } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import Link from '@material-ui/core/Link';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import StoreContext from '../../contexts/store-context';
 import usePromise from '../../hooks/use-promise';
-import EntityList from '../../components/entity-list';
+import ItemList from '../../components/item-list';
 import SearchInput from '../../components/search-input';
 
 
@@ -44,20 +43,20 @@ const useStyles = makeStyles((theme) => ({
 
 function EntityPage() {
   const classes = useStyles();
-  const { schemaId } = useParams();
+  const { entityId } = useParams();
 
-  const { getSchema, findEntities } = React.useContext(StoreContext);
+  const { getEntity, findItems } = React.useContext(StoreContext);
 
-  const [schema, { isFetching }] = usePromise(() => getSchema(schemaId), {
-    dependencies: [schemaId],
+  const [entity, { isFetching }] = usePromise(() => getEntity(entityId), {
+    dependencies: [entityId],
   });
 
 
-  if (isFetching || !schema) {
+  if (isFetching || !entity) {
     return <CircularProgress />;
   }
 
-  const { title } = schema;
+  const { name, pluralName } = entity;
 
 
   return (
@@ -66,7 +65,7 @@ function EntityPage() {
       <div className={classes.toolbar}>
 
         <Typography variant="h4">
-          {title}
+          {pluralName}
         </Typography>
 
         <span className={classes.spacer} />
@@ -75,12 +74,12 @@ function EntityPage() {
           color="primary"
           className={classes.button}
           variant="contained"
-          href={`${schemaId}/new`}
+          href={`${entityId}/new`}
           size="large"
         >
           Add
           {' '}
-          {title}
+          {name}
         </Button>
 
       </div>
@@ -88,12 +87,12 @@ function EntityPage() {
 
       <SearchInput
         className={classes.searchInput}
-        placeholder={`Search ${title}`}
+        placeholder={`Search ${pluralName}`}
       />
 
-      <EntityList
-        schema={schema}
-        getData={({ skip, limit }) => findEntities({ schemaId: schema.id, skip, limit })}
+      <ItemList
+        schema={entity.schema}
+        getData={({ skip, limit }) => findItems({ entityId: entity.id, skip, limit })}
       />
 
     </div>

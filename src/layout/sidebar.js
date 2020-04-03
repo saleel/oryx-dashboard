@@ -7,6 +7,7 @@ import {
 } from '@material-ui/core';
 import DashboardIcon from '@material-ui/icons/Home';
 import PeopleIcon from '@material-ui/icons/People';
+import AddIcon from '@material-ui/icons/AddCircle';
 import StoreContext from '../contexts/store-context';
 import usePromise from '../hooks/use-promise';
 
@@ -47,6 +48,8 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     marginRight: theme.spacing(1),
+    fontSize: '1.5rem',
+    justifyContent: 'center',
   },
   active: {
     color: theme.palette.primary.main,
@@ -62,9 +65,9 @@ const Sidebar = (props) => {
     open, variant, onClose, className,
   } = props;
 
-  const { findSchemas } = React.useContext(StoreContext);
+  const { findEntities } = React.useContext(StoreContext);
 
-  const [schemas] = usePromise(() => findSchemas(), {
+  const [entities] = usePromise(() => findEntities(), {
     defaultValue: [],
   });
 
@@ -114,22 +117,40 @@ const Sidebar = (props) => {
             </ListItem>
           ))}
           <Divider />
-          {schemas.map((schema) => (
+          {entities.map((entity) => (
             <ListItem
               className={classes.item}
               disableGutters
-              key={schema.id}
+              key={entity.id}
             >
               <Button
                 activeClassName={classes.active}
                 className={classes.button}
-                href={`/${schema.id}`}
+                href={`/${entity.id}`}
               >
-                <div className={classes.icon} />
-                {schema.title}
+                <div className={classes.icon}>
+                  {entity.pluralName[0]}
+                </div>
+                {entity.pluralName}
               </Button>
             </ListItem>
           ))}
+          <ListItem
+            className={classes.item}
+            disableGutters
+            key="new-entity"
+          >
+            <Button
+              activeClassName={classes.active}
+              className={classes.button}
+              href="/entity/new"
+            >
+              <div className={classes.icon}>
+                <AddIcon />
+              </div>
+              New Entity
+            </Button>
+          </ListItem>
         </List>
       </div>
     </Drawer>

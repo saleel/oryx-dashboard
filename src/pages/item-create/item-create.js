@@ -1,14 +1,11 @@
 import React from 'react';
 import { makeStyles, Typography } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { useHistory, useParams } from 'react-router-dom';
 import clsx from 'clsx';
 import StoreContext from '../../contexts/store-context';
 import usePromise from '../../hooks/use-promise';
-import EntityList from '../../components/entity-list';
-import SearchInput from '../../components/search-input';
-import EntityEditForm from '../../components/entity-edit-form';
+import EntityEditForm from '../../components/item-edit-form';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -23,27 +20,27 @@ const useStyles = makeStyles((theme) => ({
 
 function ItemCreatePage() {
   const classes = useStyles();
-  const { schemaId } = useParams();
+  const { entityId } = useParams();
   const history = useHistory();
 
-  const { getSchema, createEntity } = React.useContext(StoreContext);
+  const { getEntity, createItem } = React.useContext(StoreContext);
 
-  const [schema, { isFetching }] = usePromise(() => getSchema(schemaId), {
-    dependencies: [schemaId],
+  const [entity, { isFetching }] = usePromise(() => getEntity(entityId), {
+    dependencies: [entityId],
   });
 
 
   async function handleSubmit(data) {
-    await createEntity({ schemaId, data });
-    history.push(`/${schemaId}`);
+    await createItem({ entityId, data });
+    history.push(`/${entityId}`);
   }
 
 
-  if (isFetching || !schema) {
+  if (isFetching || !entity) {
     return <CircularProgress />;
   }
 
-  const { title } = schema;
+  const { title } = entity;
 
 
   return (
@@ -60,7 +57,7 @@ function ItemCreatePage() {
       </div>
 
       <EntityEditForm
-        schema={schema}
+        schema={entity.schema}
         onSubmit={handleSubmit}
       />
 
