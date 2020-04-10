@@ -1,100 +1,55 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  AppBar, Toolbar, IconButton, Typography, Hidden, useMediaQuery,
-} from '@material-ui/core';
-import clsx from 'clsx';
-import { makeStyles, useTheme } from '@material-ui/styles';
-import MenuIcon from '@material-ui/icons/Menu';
-import Sidebar from './sidebar';
-
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    paddingTop: 56,
-    height: 'calc(100% - 64px)',
-    [theme.breakpoints.up('sm')]: {
-      paddingTop: 64,
-    },
-  },
-  appBar: {
-    height: 64,
-  },
-  shiftContent: {
-    paddingLeft: 240,
-  },
-  content: {
-    backgroundColor: '#F1F4F6',
-    padding: '2rem',
-    height: '100%',
-  },
-  title: {
-    fontSize: '1.2rem',
-    padding: 0,
-    fontWeight: 'bold',
-  },
-}));
+import { Navbar, Nav, Container } from 'react-bootstrap';
+import usePromise from '../hooks/use-promise';
+import StoreContext from '../contexts/store-context';
+import './layout.scss';
 
 
 const Layout = (props) => {
   const { children } = props;
 
-  const classes = useStyles();
-  const theme = useTheme();
-  const isDesktop = useMediaQuery(theme.breakpoints.up('lg'), {
-    defaultMatches: true,
+  const { findEntities } = React.useContext(StoreContext);
+
+  const [entities] = usePromise(() => findEntities(), {
+    defaultValue: [],
   });
-
-  const [openSidebar, setOpenSidebar] = React.useState(false);
-
-  const handleSidebarOpen = () => {
-    setOpenSidebar(true);
-  };
-
-  const handleSidebarClose = () => {
-    setOpenSidebar(false);
-  };
-
-  const shouldOpenSidebar = isDesktop ? true : openSidebar;
 
 
   return (
-    <div
-      className={clsx({
-        [classes.root]: true,
-        [classes.shiftContent]: isDesktop,
-      })}
-    >
-      <AppBar className={classes.appBar}>
-        <Toolbar>
+    <div className="layout">
+      <Navbar className="layout__appbar" bg="white">
+        <Container>
+          <Navbar.Brand href="/">Oryx Dashboard</Navbar.Brand>
+          <Nav className="ml-auto">
+            <div>User Name</div>
+          </Nav>
+        </Container>
+      </Navbar>
 
-          <Hidden lgUp>
-            <IconButton onClick={handleSidebarOpen} edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-              <MenuIcon />
-            </IconButton>
-          </Hidden>
+      <Navbar className="layout__menu" bg="white">
+        <Container>
+          <Nav.Link href="/">Home</Nav.Link>
+          {entities.map((entity) => (
+            <Nav.Link href={`/${entity.id}`}>{entity.name}</Nav.Link>
+          ))}
+          <Nav.Link href="/entity/new">New Entity</Nav.Link>
+        </Container>
+      </Navbar>
 
-          <Typography variant="h1" className={classes.title}>
-            Oryx Admin
-          </Typography>
-        </Toolbar>
-      </AppBar>
-
-      <Sidebar
-        onClose={handleSidebarClose}
-        open={shouldOpenSidebar}
-        variant={isDesktop ? 'persistent' : 'temporary'}
-      />
-
-      <main className={clsx(classes.content, isDesktop && classes.shiftContent)}>
-        {children}
+      <main className="layout__content">
+        <Container>
+          {children}
+        </Container>
       </main>
     </div>
   );
 };
 
+
 Layout.propTypes = {
   children: PropTypes.node.isRequired,
 };
+
 
 export default Layout;

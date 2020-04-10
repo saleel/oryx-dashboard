@@ -1,0 +1,15 @@
+.entity-page {
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+
+  &__search {
+    margin-bottom: 1.5rem;
+    max-width: 30rem;
+  }
+
+}

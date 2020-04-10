@@ -1,35 +1,9 @@
-// @ts-check
-
 import React from 'react';
 import PropTypes from 'prop-types';
-import Card from '@material-ui/core/Card';
-import Button from '@material-ui/core/Button';
-import CardContent from '@material-ui/core/CardContent';
-import Box from '@material-ui/core/Box';
-import {
-  makeStyles,
-} from '@material-ui/core';
-import clsx from 'clsx';
-import { withTheme } from 'react-jsonschema-form';
-import { Theme as MuiTheme } from 'rjsf-material-ui';
+import Form from 'react-jsonschema-form';
 import pick from 'lodash/pick';
-
-
-const Form = withTheme(MuiTheme);
-
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  input: {
-    minWidth: '30rem',
-    marginBottom: theme.spacing(2),
-  },
-  title: {
-    flexGrow: 1,
-  },
-}));
+import { Card, Button } from 'react-bootstrap';
+import './item-edit-form.scss';
 
 
 function EntityEditForm(props) {
@@ -37,8 +11,6 @@ function EntityEditForm(props) {
     schema, uiSchema, onSubmit, values,
   } = props;
 
-
-  const classes = useStyles();
 
   // const [value, setValue] = React.useState(defaultValues);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -60,29 +32,19 @@ function EntityEditForm(props) {
 
 
   return (
-    <Card
-      className={clsx(classes.root)}
-    >
-      <CardContent className={classes.content}>
-        <div className={classes.inner}>
+    <Card className="item-edit-form">
 
-          <Form
-            schema={pick(schema, ['properties', 'required'])}
-            uiSchema={uiSchema}
-            // onChange={log('changed')}
-            formData={values}
-            onSubmit={handleSubmit}
-          // onError={log('errors')}
-          >
-            <Box mt={3}>
-              <Button variant="contained" size="large" color="primary" type="submit">
-                Submit
-              </Button>
-            </Box>
-          </Form>
-
-        </div>
-      </CardContent>
+      <Form
+        schema={pick(schema, ['properties', 'required'])}
+        uiSchema={uiSchema}
+        // onChange={log('changed')}
+        formData={values}
+        onSubmit={handleSubmit}
+      >
+        <Button className="mt-4" variant="outline-primary" size="md" type="submit">
+          Submit
+        </Button>
+      </Form>
 
     </Card>
   );
@@ -94,12 +56,14 @@ EntityEditForm.propTypes = {
     properties: PropTypes.shape({}),
   }).isRequired,
   onSubmit: PropTypes.func.isRequired,
+  values: PropTypes.shape({}),
   uiSchema: PropTypes.shape({}),
 };
 
 
 EntityEditForm.defaultProps = {
   uiSchema: {},
+  values: {},
 };
 
 

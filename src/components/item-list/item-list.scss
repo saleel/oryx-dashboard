@@ -1,0 +1,9 @@
+.item-list {
+  background-color: #fff;
+  border: 1px solid var(--border-color);
+
+
+  &__pagination {
+    justify-content: center;
+  }
+}

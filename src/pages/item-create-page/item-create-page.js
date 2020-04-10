@@ -1,25 +1,13 @@
 import React from 'react';
-import { makeStyles, Typography } from '@material-ui/core';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import { useHistory, useParams } from 'react-router-dom';
-import clsx from 'clsx';
+import { Spinner } from 'react-bootstrap';
 import StoreContext from '../../contexts/store-context';
 import usePromise from '../../hooks/use-promise';
 import EntityEditForm from '../../components/item-edit-form';
-
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-  },
-  toolbar: {
-    display: 'flex',
-    marginBottom: theme.spacing(3),
-  },
-}));
+import './item-create-page.scss';
 
 
 function ItemCreatePage() {
-  const classes = useStyles();
   const { entityId } = useParams();
   const history = useHistory();
 
@@ -37,24 +25,20 @@ function ItemCreatePage() {
 
 
   if (isFetching || !entity) {
-    return <CircularProgress />;
+    return <Spinner />;
   }
 
-  const { title } = entity;
+  const { name } = entity;
 
 
   return (
-    <div className={clsx(classes.root)}>
+    <div className="item-create-page">
 
-      <div className={classes.toolbar}>
-
-        <Typography variant="h4">
-          Create new
-          {' '}
-          {title}
-        </Typography>
-
-      </div>
+      <h2 className="item-create-page__header">
+        Create new
+        {' '}
+        {name}
+      </h2>
 
       <EntityEditForm
         schema={entity.schema}

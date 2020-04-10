@@ -1,23 +1,11 @@
 import React from 'react';
-import { makeStyles, Typography } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
-import clsx from 'clsx';
 import StoreContext from '../../contexts/store-context';
 import ItemEditForm from '../../components/item-edit-form';
-
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-  },
-  toolbar: {
-    display: 'flex',
-    marginBottom: theme.spacing(3),
-  },
-}));
+import './entity-create-page.scss';
 
 
 function EntityCreatePage() {
-  const classes = useStyles();
   const history = useHistory();
 
   const { createEntity } = React.useContext(StoreContext);
@@ -55,13 +43,23 @@ function EntityCreatePage() {
   };
 
   const uiSchema = {
-    properties: {
-      items: {
-        key: {
-          classNames: 'MuiGrid-spacing-md-4',
-        },
-      },
-    },
+    // properties: {
+    //   classNames: 'row',
+    //   items: {
+    //     key: {
+    //       classNames: 'col-4',
+    //     },
+    //     type: {
+    //       classNames: 'col-4',
+    //     },
+    //     title: {
+    //       classNames: 'col-4',
+    //     },
+    //     description: {
+    //       classNames: 'col-4',
+    //     },
+    //   },
+    // },
   };
 
 
@@ -93,13 +91,11 @@ function EntityCreatePage() {
 
 
   return (
-    <div className={clsx(classes.root)}>
+    <>
 
-      <div className={classes.toolbar}>
-        <Typography variant="h4">
-          Create new Entity
-        </Typography>
-      </div>
+      <h2>
+        Create new Entity
+      </h2>
 
       <ItemEditForm
         schema={schema}
@@ -107,7 +103,7 @@ function EntityCreatePage() {
         onSubmit={handleSubmit}
       />
 
-    </div>
+    </>
   );
 }
 

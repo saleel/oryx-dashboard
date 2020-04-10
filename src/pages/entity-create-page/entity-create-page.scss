@@ -1,0 +1,14 @@
+.entity-create-page {
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+
+  &__btn-add {
+    font-weight: 600;
+  }
+
+}

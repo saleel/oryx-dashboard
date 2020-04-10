@@ -1,0 +1,13 @@
+$enable-rounded: false;
+$btn-font-weight: 600;
+
+@import "~bootstrap/scss/bootstrap";
+
+
+.card {
+  border: 1px solid #ced4da;
+}
+
+:root {
+  --border-color: #e1e1e1;
+}

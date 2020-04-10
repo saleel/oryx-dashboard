@@ -2,41 +2,8 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TablePagination from '@material-ui/core/TablePagination';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import {
-  makeStyles,
-} from '@material-ui/core';
-
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
-    flexGrow: 1,
-  },
-  content: {
-    padding: 0,
-  },
-  tableRow: {
-    // height: '3rem',
-  },
-  tableCell: {
-    padding: '1rem',
-    minHeight: '1rem',
-  },
-}));
+import { Card as div, Table, Pagination } from 'react-bootstrap';
+import './item-list.scss';
 
 
 /**
@@ -49,18 +16,23 @@ function ItemList(props) {
   } = props;
 
 
-  const classes = useStyles();
-
   const { properties } = schema;
   const [data, setData] = React.useState([]);
-  const [pageNumber, setPageNumber] = React.useState(0);
-  const [total, setTotal] = React.useState(1);
-  const [limit, setLimit] = React.useState(pageLimit);
+  const [pageNumber, setPageNumber] = React.useState(1);
+  const [total, setTotal] = React.useState(0);
+  const [limit] = React.useState(pageLimit);
+
+
+  const keysToShow = schema.required || Object.keys(schema.properties).slice(0, 5).filter(Boolean);
+
+  const numberOfPages = Math.ceil(total / limit);
+  const showPagination = numberOfPages > 1;
+  const pages = showPagination ? [...new Array(numberOfPages)].map((_, i) => (i + 1)) : [];
 
 
   React.useEffect(() => {
     let isUnmounted = false;
-    const skip = pageNumber * pageLimit;
+    const skip = (pageNumber - 1) * pageLimit;
 
     getData({ skip, limit }).then((result) => {
       if (!isUnmounted) {
@@ -73,59 +45,51 @@ function ItemList(props) {
   }, [getData, limit, pageLimit, pageNumber]);
 
 
-  function onChangePage(e, page) {
+  function onChangePage(page) {
     setPageNumber(page);
-  }
-
-  function onChangeRowsPerPage(e) {
-    setLimit(e.target.value);
   }
 
 
   return (
-    <Card className={classes.root}>
-      <CardContent className={classes.content}>
-        <div className={classes.inner}>
-          <Table>
+    <div className="item-list">
+      <Table responsive borderless hover striped>
 
-            <TableHead>
-              <TableRow>
-                {Object.keys(properties).map((key) => (
-                  <TableCell>{properties[key].title}</TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
+        <thead>
+          <tr>
+            {keysToShow.map((key) => (
+              <th>{properties[key].title}</th>
+            ))}
+          </tr>
+        </thead>
 
-            <TableBody>
-              {data.map((item) => (
-                <TableRow
-                  className={classes.tableRow}
-                  hover
-                  key={item.id}
-                >
-                  {Object.keys(properties).map((key) => (
-                    <TableCell className={classes.tableCell}>{item[key]}</TableCell>
-                  ))}
-                </TableRow>
+        <tbody>
+          {data.map((item) => (
+            <tr
+              key={item.id}
+            >
+              {keysToShow.map((key) => (
+                <td>{item[key]}</td>
               ))}
-            </TableBody>
-          </Table>
-        </div>
-      </CardContent>
+            </tr>
+          ))}
+        </tbody>
 
-      <CardActions className={classes.actions}>
-        <TablePagination
-          component="div"
-          count={total}
-          onChangePage={onChangePage}
-          onChangeRowsPerPage={onChangeRowsPerPage}
-          page={pageNumber}
-          rowsPerPage={limit}
-          rowsPerPageOptions={[5, 10, 25]}
-        />
-      </CardActions>
+      </Table>
 
-    </Card>
+      {showPagination && (
+        <Pagination className="item-list__pagination">
+          {pages.map((n) => (
+            <Pagination.Item
+              active={n === pageNumber}
+              onClick={() => onChangePage(n)}
+            >
+              {n}
+            </Pagination.Item>
+          ))}
+        </Pagination>
+      )}
+
+    </div>
   );
 }
 

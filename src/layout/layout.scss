@@ -1,0 +1,29 @@
+.layout {
+  width: 100%;
+  height: 100%;
+
+  &__appbar {
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  &__menu {
+    border-bottom: 1px solid var(--border-color);
+
+    .container {
+      justify-content: flex-start !important;
+    }
+
+    a {
+      border: 1px solid var(--border-color);
+      padding: 0.5rem 1rem;
+      min-width: 100px;
+    }
+  }
+
+  &__content {
+    width: 100%;
+    height: 100%;
+    background-color: #EDEEF5;
+    padding: 2rem 0;
+  }
+}
