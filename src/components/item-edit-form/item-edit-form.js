@@ -1,50 +1,71 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Form from 'react-jsonschema-form';
-import pick from 'lodash/pick';
-import { Card, Button } from 'react-bootstrap';
+import { JSONSchemaBridge } from 'uniforms-bridge-json-schema';
+import {
+  AutoForm, ErrorsField, SubmitField, AutoField, ListField,
+} from 'uniforms-bootstrap4';
+import AddIcon from '@iconscout/react-unicons/icons/uil-plus';
+import DeleteIcon from '@iconscout/react-unicons/icons/uil-trash';
+import Ajv from 'ajv';
+import { Card } from 'react-bootstrap';
 import './item-edit-form.scss';
 
 
-function EntityEditForm(props) {
-  const {
-    schema, uiSchema, onSubmit, values,
-  } = props;
+const ajv = new Ajv({ allErrors: true, useDefaults: true });
 
+function createValidator(schema) {
+  const validator = ajv.compile(schema);
+
+  return (model) => {
+    validator(model);
+
+    if (validator.errors && validator.errors.length) {
+      throw { details: validator.errors };
+    }
+  };
+}
+
+
+function EntityEditForm(props) {
+  const { schema, onSubmit, values } = props;
 
   // const [value, setValue] = React.useState(defaultValues);
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
+
+  const schemaValidator = createValidator(schema);
+  const bridgedSchema = new JSONSchemaBridge(schema, schemaValidator);
 
 
-  async function handleSubmit({ formData }) {
-    if (isSubmitting) {
-      return;
-    }
-
-    setIsSubmitting(true);
-    try {
-      await onSubmit(formData);
-    } catch (error) {
-      // eslint-disable-next-line no-alert
-      window.alert(error.message);
-    }
-  }
+  if (!schema) return null;
 
 
   return (
     <Card className="item-edit-form">
 
-      <Form
-        schema={pick(schema, ['properties', 'required'])}
-        uiSchema={uiSchema}
+      <AutoForm
+        schema={bridgedSchema}
         // onChange={log('changed')}
-        formData={values}
-        onSubmit={handleSubmit}
+        // formData={values}
+        onSubmit={onSubmit}
       >
-        <Button className="mt-4" variant="outline-primary" size="md" type="submit">
-          Submit
-        </Button>
-      </Form>
+        {Object.keys(schema.properties).map((key) => {
+          const property = schema.properties[key];
+
+          if (property.type === 'array' && property.items.type === 'object') {
+            return (
+              <ListField
+                name={key}
+                addIcon={<AddIcon size="1.5rem" />}
+                removeIcon={<DeleteIcon size="1.5rem" />}
+              />
+            );
+          }
+
+          return <AutoField name={key} />;
+        })}
+
+        <ErrorsField />
+        <SubmitField className="mt-5" />
+      </AutoForm>
 
     </Card>
   );
@@ -57,12 +78,10 @@ EntityEditForm.propTypes = {
   }).isRequired,
   onSubmit: PropTypes.func.isRequired,
   values: PropTypes.shape({}),
-  uiSchema: PropTypes.shape({}),
 };
 
 
 EntityEditForm.defaultProps = {
-  uiSchema: {},
   values: {},
 };
 

@@ -8,7 +8,7 @@ import {
 import { AuthContextProvider } from './contexts/auth-context';
 import { StoreContextProvider } from './contexts/store-context';
 import Layout from './layout';
-import Home from './home';
+import HomePage from './pages/home-page/home-page';
 import EntityPage from './pages/entity-page';
 import ItemCreatePage from './pages/item-create-page';
 import EntityCreatePage from './pages/entity-create-page';
@@ -42,7 +42,7 @@ function App() {
 
             <Route path="/">
               <Layout>
-                <Home />
+                <HomePage />
               </Layout>
             </Route>
 

@@ -21,13 +21,12 @@ function EntityCreatePage() {
       properties: {
         type: 'array',
         title: 'Properties',
-        minLength: 1,
+        minItems: 1,
         items: {
           type: 'object',
           properties: {
-            key: { type: 'string', title: 'Key', description: 'Unique key for this property' },
             title: { type: 'string', title: 'Title', description: 'Label/Name of the property' },
-            description: { type: 'string', title: 'Description', description: 'Description of the property' },
+            key: { type: 'string', title: 'Key', description: 'Unique key for this property' },
             type: {
               type: 'string',
               title: 'Type',
@@ -36,30 +35,11 @@ function EntityCreatePage() {
                 'string', 'number',
               ],
             },
+            description: { type: 'string', title: 'Description', description: 'Description of the property' },
           },
         },
       },
     },
-  };
-
-  const uiSchema = {
-    // properties: {
-    //   classNames: 'row',
-    //   items: {
-    //     key: {
-    //       classNames: 'col-4',
-    //     },
-    //     type: {
-    //       classNames: 'col-4',
-    //     },
-    //     title: {
-    //       classNames: 'col-4',
-    //     },
-    //     description: {
-    //       classNames: 'col-4',
-    //     },
-    //   },
-    // },
   };
 
 
@@ -80,6 +60,7 @@ function EntityCreatePage() {
       schema: {
         title: name,
         description,
+        type: 'object',
         properties,
       },
     };
@@ -91,19 +72,18 @@ function EntityCreatePage() {
 
 
   return (
-    <>
+    <div className="entity-create-page">
 
-      <h2>
+      <h2 className="entity-create-page__header">
         Create new Entity
       </h2>
 
       <ItemEditForm
         schema={schema}
-        uiSchema={uiSchema}
         onSubmit={handleSubmit}
       />
 
-    </>
+    </div>
   );
 }
 

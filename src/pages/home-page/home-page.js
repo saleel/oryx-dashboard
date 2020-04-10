@@ -1,5 +1,5 @@
 import React from 'react';
-import WidgetCount from './components/widget-count';
+import WidgetCount from '../../components/widget-count';
 // import StoreContext from './contexts/store-context';
 // import usePromise from './hooks/use-promise';
 
