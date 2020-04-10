@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { Spinner, Button } from 'react-bootstrap';
 import StoreContext from '../../contexts/store-context';
 import usePromise from '../../hooks/use-promise';
@@ -34,15 +34,14 @@ function EntityPage() {
           {pluralName}
         </h2>
 
-        <Button
-          variant="outline-primary"
-          href={`/${entityId}/new`}
-          size="md"
+        <Link
+          className="btn btn-md btn-outline-primary"
+          to={`/${entityId}/new`}
         >
           Add
           {' '}
           {name}
-        </Button>
+        </Link>
 
       </div>
 

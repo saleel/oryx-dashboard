@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Navbar, Nav, Container } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import usePromise from '../hooks/use-promise';
 import StoreContext from '../contexts/store-context';
 import './layout.scss';
@@ -29,11 +30,13 @@ const Layout = (props) => {
 
       <Navbar className="layout__menu" bg="white">
         <Container>
-          <Nav.Link href="/">Home</Nav.Link>
+          <Link to="/">Home</Link>
           {entities.map((entity) => (
-            <Nav.Link href={`/${entity.id}`}>{entity.name}</Nav.Link>
+            <Link to={`/${entity.id}`}>
+              {entity.name}
+            </Link>
           ))}
-          <Nav.Link href="/entity/new">New Entity</Nav.Link>
+          <Link to="/entity/new">New Entity</Link>
         </Container>
       </Navbar>
 
