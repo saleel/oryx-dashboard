@@ -1,4 +1,5 @@
 {
+  "typeAcquisition": { "include": ["chrome", "browser"] },
   "compilerOptions": {
     /* Basic Options */
     // "incremental": true,                   /* Enable incremental compilation */
