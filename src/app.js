@@ -5,52 +5,73 @@ import {
   Switch,
   Route,
 } from 'react-router-dom';
-import { AuthContextProvider } from './contexts/auth-context';
-import { StoreContextProvider } from './contexts/store-context';
+import { Spinner } from 'react-bootstrap';
 import Layout from './layout';
 import HomePage from './pages/home-page/home-page';
 import EntityPage from './pages/entity-page';
 import ItemCreatePage from './pages/item-create-page';
 import EntityCreatePage from './pages/entity-create-page';
+import StoreContext from './contexts/store-context';
+import usePromise from './hooks/use-promise';
 
 
 function App() {
+  const { findEntities } = React.useContext(StoreContext);
+
+  const [entities, { isFetching }] = usePromise(() => findEntities());
+
+
+  if (!entities || isFetching) {
+    return (<Spinner />);
+  }
+
+
+  const routes = [
+    {
+      path: '/entity/new',
+      component: EntityCreatePage,
+      title: 'New entity',
+    },
+    {
+      path: '/:entityId/new',
+      component: ItemCreatePage,
+      title: ({ entityId }) => `New ${entities.find((e) => e.id === entityId).name}`,
+    },
+    {
+      path: '/:entityId',
+      component: EntityPage,
+      title: ({ entityId }) => `${entities.find((e) => e.id === entityId).name}`,
+    },
+    {
+      path: '/',
+      component: HomePage,
+      title: 'Home',
+    },
+  ];
+
+
   return (
-    <AuthContextProvider>
-      <StoreContextProvider>
+    <Router>
+      <Switch>
 
-        <Router>
-          <Switch>
+        {routes.map((route) => (
+          <Route
+            key={route.path}
+            path={route.path}
+            component={({ match }) => {
+              const pageTitle = typeof route.title === 'function' ? route.title(match.params) : route.title;
 
-            <Route path="/entity/new">
-              <Layout>
-                <EntityCreatePage />
-              </Layout>
-            </Route>
+              return (
+                <Layout entities={entities} pageTitle={pageTitle}>
+                  <route.component />
+                </Layout>
+              );
+            }}
+          />
+        ))}
 
-            <Route path="/:entityId/new">
-              <Layout>
-                <ItemCreatePage />
-              </Layout>
-            </Route>
-
-            <Route path="/:entityId">
-              <Layout>
-                <EntityPage />
-              </Layout>
-            </Route>
-
-            <Route path="/">
-              <Layout>
-                <HomePage />
-              </Layout>
-            </Route>
-
-          </Switch>
-        </Router>
-
-      </StoreContextProvider>
-    </AuthContextProvider>
+      </Switch>
+    </Router>
   );
 }
 

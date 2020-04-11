@@ -57,18 +57,16 @@ function ItemList(props) {
         <thead>
           <tr>
             {keysToShow.map((key) => (
-              <th>{properties[key].title}</th>
+              <th key={key}>{properties[key].title}</th>
             ))}
           </tr>
         </thead>
 
         <tbody>
           {data.map((item) => (
-            <tr
-              key={item.id}
-            >
+            <tr key={item.id}>
               {keysToShow.map((key) => (
-                <td>{item[key]}</td>
+                <td key={key}>{item[key]}</td>
               ))}
             </tr>
           ))}

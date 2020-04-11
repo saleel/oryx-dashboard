@@ -17,6 +17,14 @@
     }
   }
 
+  &__page-title {
+    font-size: 1.25rem;
+    text-transform: uppercase;
+    border-left: 0.25rem solid indigo;
+    padding-left: 0.5rem;
+    margin-bottom: 2rem;
+  }
+
   &__content {
     width: 100%;
     height: 100%;

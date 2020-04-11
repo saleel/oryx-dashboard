@@ -20,6 +20,7 @@ function createValidator(schema) {
     validator(model);
 
     if (validator.errors && validator.errors.length) {
+      // eslint-disable-next-line no-throw-literal
       throw { details: validator.errors };
     }
   };

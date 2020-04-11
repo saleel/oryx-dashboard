@@ -12,16 +12,16 @@ const SearchInput = (props) => {
 
   return (
     <InputGroup className={className}>
-      <InputGroup.Prepend>
-        <InputGroup.Text>
-          <SearchIcon size="1.25rem" />
-        </InputGroup.Text>
-      </InputGroup.Prepend>
-
       <FormControl
         placeholder={placeholder}
         onChange={onChange}
       />
+
+      <InputGroup.Append>
+        <InputGroup.Text>
+          <SearchIcon size="1.25rem" />
+        </InputGroup.Text>
+      </InputGroup.Append>
     </InputGroup>
   );
 };

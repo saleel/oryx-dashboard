@@ -74,10 +74,6 @@ function EntityCreatePage() {
   return (
     <div className="entity-create-page">
 
-      <h2 className="entity-create-page__header">
-        Create new Entity
-      </h2>
-
       <ItemEditForm
         schema={schema}
         onSubmit={handleSubmit}

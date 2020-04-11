@@ -28,17 +28,9 @@ function ItemCreatePage() {
     return <Spinner />;
   }
 
-  const { name } = entity;
-
 
   return (
     <div className="item-create-page">
-
-      <h2 className="item-create-page__header">
-        Create new
-        {' '}
-        {name}
-      </h2>
 
       <EntityEditForm
         schema={entity.schema}

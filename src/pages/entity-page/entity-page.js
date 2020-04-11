@@ -1,10 +1,10 @@
 import React from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { Spinner, Button } from 'react-bootstrap';
+import { Link, useParams } from 'react-router-dom';
+import { Card, Spinner } from 'react-bootstrap';
 import StoreContext from '../../contexts/store-context';
-import usePromise from '../../hooks/use-promise';
 import ItemList from '../../components/item-list';
 import SearchInput from '../../components/search-input';
+import usePromise from '../../hooks/use-promise';
 import './entity-page.scss';
 
 
@@ -18,44 +18,42 @@ function EntityPage() {
   });
 
 
-  if (isFetching || !entity) {
-    return <Spinner />;
+  if (!entity || isFetching) {
+    return (<Spinner />);
   }
 
-  const { name, pluralName } = entity;
+
+  const { id, name, pluralName } = entity;
 
 
   return (
     <div className="entity-page">
+      <Card className="p-4">
 
-      <div className="entity-page__header">
+        <div className="row d-flex justify-content-between">
+          <SearchInput
+            className="col-xs-12 col-md-6 col-lg-4 mb-4"
+            placeholder={`Search ${pluralName}`}
+          />
 
-        <h2 className="m-0">
-          {pluralName}
-        </h2>
+          <div className="col-xs-12 col-md-6 justify-content-end d-flex w-100 mb-4">
+            <Link
+              className="btn btn-md btn-outline-primary"
+              to={`/${id}/new`}
+            >
+              Add
+              {' '}
+              {name}
+            </Link>
+          </div>
+        </div>
 
-        <Link
-          className="btn btn-md btn-outline-primary"
-          to={`/${entityId}/new`}
-        >
-          Add
-          {' '}
-          {name}
-        </Link>
+        <ItemList
+          schema={entity.schema}
+          getData={({ skip, limit }) => findItems({ entityId: entity.id, skip, limit })}
+        />
 
-      </div>
-
-
-      <SearchInput
-        placeholder={`Search ${pluralName}`}
-        className="entity-page__search"
-      />
-
-      <ItemList
-        schema={entity.schema}
-        getData={({ skip, limit }) => findItems({ entityId: entity.id, skip, limit })}
-      />
-
+      </Card>
     </div>
   );
 }
