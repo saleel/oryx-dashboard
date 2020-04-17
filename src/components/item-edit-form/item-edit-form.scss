@@ -1,3 +1,55 @@
 .item-edit-form {
   padding: 2rem;
+
+  &__array-field-template-fields {
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+
+    .field-object {
+      padding: 0 1rem 1rem 1rem;
+      border: 1px solid var(--border-color);
+     
+      &:hover {
+        background-color: #f0f0f0;
+      }
+
+      .field-object {
+        &:hover {
+          background-color: #e1e1e1;
+        }
+      }
+    }
+  }
+
+  &__enum {
+    padding: 0rem 0.5rem;
+  }
+
+  &__enum-item {
+    padding: 0 0.1rem;
+    margin: 0 0.25rem;
+    background-color: #93aecc;
+    border-radius: 0;
+    font-size: 1.1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    span {
+      padding: 0 0.5rem;
+    }
+  }
+
+  &__enum-delete {
+    padding: 0;
+    margin: 0;
+    background-color: #e3e3e3;
+    border: none;
+    color: #aaaaaa;
+
+    &:hover {
+      background-color: #bbbbbb;
+      border: none;
+    }
+  }
 }

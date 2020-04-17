@@ -1,90 +1,78 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { JSONSchemaBridge } from 'uniforms-bridge-json-schema';
-import {
-  AutoForm, ErrorsField, SubmitField, AutoField, ListField,
-} from 'uniforms-bootstrap4';
-import AddIcon from '@iconscout/react-unicons/icons/uil-plus';
-import DeleteIcon from '@iconscout/react-unicons/icons/uil-trash';
-import Ajv from 'ajv';
-import { Card } from 'react-bootstrap';
+import Form from 'react-jsonschema-form-bs4';
+import { Card, Button } from 'react-bootstrap';
+import ArrayFieldTemplate from './array-field-template';
+import SchemaObjectTemplate from './schema-object-template';
 import './item-edit-form.scss';
+import ArrayField from './array-field';
 
 
-const ajv = new Ajv({ allErrors: true, useDefaults: true });
-
-function createValidator(schema) {
-  const validator = ajv.compile(schema);
-
-  return (model) => {
-    validator(model);
-
-    if (validator.errors && validator.errors.length) {
-      // eslint-disable-next-line no-throw-literal
-      throw { details: validator.errors };
-    }
-  };
-}
-
-
-function EntityEditForm(props) {
-  const { schema, onSubmit, values } = props;
+function ItemEditForm(props) {
+  const {
+    schema, onSubmit, values, onChange,
+  } = props;
 
   // const [value, setValue] = React.useState(defaultValues);
 
-  const schemaValidator = createValidator(schema);
-  const bridgedSchema = new JSONSchemaBridge(schema, schemaValidator);
-
 
   if (!schema) return null;
+
+  const uiSchema = {
+    properties: {
+      'ui:ArrayFieldTemplate': ArrayFieldTemplate,
+      items: {
+        'ui:ObjectFieldTemplate': SchemaObjectTemplate,
+        properties: {
+          'ui:ArrayFieldTemplate': ArrayFieldTemplate,
+          items: {
+            'ui:ObjectFieldTemplate': SchemaObjectTemplate,
+          },
+        },
+      },
+    },
+  };
+
+  const customFields = {
+    DescriptionField: () => null,
+    ArrayField,
+  };
 
 
   return (
     <Card className="item-edit-form">
 
-      <AutoForm
-        schema={bridgedSchema}
-        // onChange={log('changed')}
-        // formData={values}
-        onSubmit={onSubmit}
+      <Form
+        schema={schema}
+        uiSchema={uiSchema}
+        onSubmit={({ formData }) => onSubmit(formData)}
+        onError={(error) => console.error(error)}
+        fields={customFields}
       >
-        {Object.keys(schema.properties).map((key) => {
-          const property = schema.properties[key];
-
-          if (property.type === 'array' && property.items.type === 'object') {
-            return (
-              <ListField
-                name={key}
-                addIcon={<AddIcon size="1.5rem" />}
-                removeIcon={<DeleteIcon size="1.5rem" />}
-              />
-            );
-          }
-
-          return <AutoField name={key} />;
-        })}
-
-        <ErrorsField />
-        <SubmitField className="mt-5" />
-      </AutoForm>
+        <div>
+          <Button type="submit" variant="primary">Submit</Button>
+        </div>
+      </Form>
 
     </Card>
   );
 }
 
 
-EntityEditForm.propTypes = {
+ItemEditForm.propTypes = {
   schema: PropTypes.shape({
     properties: PropTypes.shape({}),
   }).isRequired,
   onSubmit: PropTypes.func.isRequired,
+  onChange: PropTypes.func,
   values: PropTypes.shape({}),
 };
 
 
-EntityEditForm.defaultProps = {
+ItemEditForm.defaultProps = {
   values: {},
+  onChange: null,
 };
 
 
-export default EntityEditForm;
+export default ItemEditForm;

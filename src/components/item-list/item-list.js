@@ -50,6 +50,27 @@ function ItemList(props) {
   }
 
 
+  function renderValue(value) {
+    if (Array.isArray(value)) {
+      return value.map(((val) => (
+        <div>{val}</div>
+      )));
+    }
+
+    if (typeof value === 'object') {
+      return Object.keys(value).map((k) => (
+        <div>
+          {k}
+          {': '}
+          {value[k]}
+        </div>
+      ));
+    }
+
+    return value;
+  }
+
+
   return (
     <div className="item-list">
       <Table responsive borderless hover striped>
@@ -66,7 +87,9 @@ function ItemList(props) {
           {data.map((item) => (
             <tr key={item.id}>
               {keysToShow.map((key) => (
-                <td key={key}>{item[key]}</td>
+                <td key={key}>
+                  {renderValue(item[key])}
+                </td>
               ))}
             </tr>
           ))}

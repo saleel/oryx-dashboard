@@ -22,7 +22,7 @@ function App() {
 
 
   if (!entities || isFetching) {
-    return (<Spinner />);
+    return (<Spinner animation="border" />);
   }
 
 
