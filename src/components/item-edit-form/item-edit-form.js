@@ -10,10 +10,8 @@ import ArrayField from './array-field';
 
 function ItemEditForm(props) {
   const {
-    schema, onSubmit, values, onChange,
+    schema, onSubmit, item, onChange,
   } = props;
-
-  // const [value, setValue] = React.useState(defaultValues);
 
 
   if (!schema) return null;
@@ -45,7 +43,13 @@ function ItemEditForm(props) {
       <Form
         schema={schema}
         uiSchema={uiSchema}
+        formData={item}
         onSubmit={({ formData }) => onSubmit(formData)}
+        onChange={({ formData }) => {
+          if (typeof onChange === 'function') {
+            onChange(formData);
+          }
+        }}
         onError={(error) => console.error(error)}
         fields={customFields}
       >
@@ -65,12 +69,12 @@ ItemEditForm.propTypes = {
   }).isRequired,
   onSubmit: PropTypes.func.isRequired,
   onChange: PropTypes.func,
-  values: PropTypes.shape({}),
+  item: PropTypes.shape({}),
 };
 
 
 ItemEditForm.defaultProps = {
-  values: {},
+  item: {},
   onChange: null,
 };
 

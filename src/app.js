@@ -13,6 +13,7 @@ import ItemCreatePage from './pages/item-create-page';
 import EntityCreatePage from './pages/entity-create-page';
 import StoreContext from './contexts/store-context';
 import usePromise from './hooks/use-promise';
+import ItemPage from './pages/item-page';
 
 
 function App() {
@@ -36,6 +37,11 @@ function App() {
       path: '/:entityId/new',
       component: ItemCreatePage,
       title: ({ entityId }) => `New ${entities.find((e) => e.id === entityId).name}`,
+    },
+    {
+      path: '/:entityId/:itemId',
+      component: ItemPage,
+      title: ({ entityId }) => `${entities.find((e) => e.id === entityId).name}`,
     },
     {
       path: '/:entityId',

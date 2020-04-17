@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  FormLabel, FormControl, Badge, InputGroup, Button,
+  FormLabel, FormControl, InputGroup, Button,
 } from 'react-bootstrap';
 import CrossIcon from '@iconscout/react-unicons/icons/uil-times';
 import DefaultArrayField from 'react-jsonschema-form-bs4/lib/components/fields/ArrayField';
@@ -12,10 +12,10 @@ function ArrayField(props) {
     schema, formData, onChange,
   } = props;
 
-  console.log(props);
+  const itemType = schema.items.type;
 
 
-  if (!['string', 'number'].includes(schema.items.type)) {
+  if (!['string', 'number'].includes(itemType)) {
     return (
       // eslint-disable-next-line react/jsx-props-no-spreading
       <DefaultArrayField {...props} />
@@ -24,23 +24,27 @@ function ArrayField(props) {
 
 
   function handleChange(e) {
-    if (e.key !== ',') {
+    if (![','].includes(e.key)) {
       return;
     }
 
-    const value = e.target.value.trim().replace(',', '');
+    let value = e.target.value.trim().replace(',', '');
 
     e.target.value = '';
 
-    if (schema.items.type === 'string' && value === '') {
+    if (itemType === 'string' && value === '') {
       return;
     }
 
-    if (schema.items.type === 'number' && !Number.isNaN(value)) {
-      return;
+    if (itemType === 'number') {
+      value = Number(value);
+
+      if (Number.isNaN(value)) {
+        return;
+      }
     }
 
-    onChange([...formData, value]);
+    onChange([...new Set([...formData, value])]);
   }
 
 
@@ -58,13 +62,13 @@ function ArrayField(props) {
 
       <InputGroup className="mb-3">
         <InputGroup.Prepend>
-          <InputGroup.Text className="item-edit-form__enum">
+          <InputGroup.Text className="item-edit-form__array">
             {formData.map((data, i) => (
-              <div className="item-edit-form__enum-item" variant="secondary">
+              <div className="item-edit-form__array-item" variant="secondary">
                 <span>
                   {data}
                 </span>
-                <Button className="btn item-edit-form__enum-delete" onClick={() => handleDelete(i)}>
+                <Button className="btn item-edit-form__array-delete" onClick={() => handleDelete(i)}>
                   <CrossIcon size="1rem" />
                 </Button>
               </div>
@@ -73,9 +77,9 @@ function ArrayField(props) {
         </InputGroup.Prepend>
 
         <FormControl
+          type={itemType}
           placeholder="Separate new items by a comma"
-          // value={formData.join(', ')}
-          onKeyUp={(e) => handleChange(e)}
+          onKeyUp={handleChange}
         />
       </InputGroup>
 

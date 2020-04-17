@@ -49,7 +49,7 @@ function EntityPage() {
         </div>
 
         <ItemList
-          schema={entity.schema}
+          entity={entity}
           getData={({ skip, limit }) => findItems({ entityId: entity.id, skip, limit })}
         />
 

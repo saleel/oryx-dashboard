@@ -3,19 +3,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Card as div, Table, Pagination } from 'react-bootstrap';
+import EditIcon from '@iconscout/react-unicons/icons/uil-edit';
 import './item-list.scss';
+import { Link } from 'react-router-dom';
 
 
 /**
  * Renders list of entities based on the data returned from getData
- * @param {{ schema: Object, getData: Function, pageLimit: number }} props
+ * @param {{ entity: Object, getData: Function, pageLimit: number }} props
  */
 function ItemList(props) {
   const {
-    schema, getData, pageLimit = 10,
+    entity, getData, pageLimit = 10,
   } = props;
 
 
+  const { id: entityId, schema } = entity;
   const { properties } = schema;
   const [data, setData] = React.useState([]);
   const [pageNumber, setPageNumber] = React.useState(1);
@@ -80,6 +83,7 @@ function ItemList(props) {
             {keysToShow.map((key) => (
               <th key={key}>{properties[key].title}</th>
             ))}
+            <th style={{ width: '100px' }}>Actions</th>
           </tr>
         </thead>
 
@@ -91,6 +95,11 @@ function ItemList(props) {
                   {renderValue(item[key])}
                 </td>
               ))}
+              <td>
+                <Link to={`/${entityId}/${item.id}/edit`}>
+                  <EditIcon />
+                </Link>
+              </td>
             </tr>
           ))}
         </tbody>
@@ -116,8 +125,12 @@ function ItemList(props) {
 
 
 ItemList.propTypes = {
-  schema: PropTypes.shape({
-    properties: PropTypes.shape({}),
+  entity: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    schema: PropTypes.shape({
+      required: PropTypes.arrayOf(PropTypes.string),
+      properties: PropTypes.shape({}),
+    }),
   }).isRequired,
   getData: PropTypes.func.isRequired,
   pageLimit: PropTypes.number,
@@ -127,5 +140,6 @@ ItemList.propTypes = {
 ItemList.defaultProps = {
   pageLimit: 10,
 };
+
 
 export default ItemList;

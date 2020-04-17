@@ -3,7 +3,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { Spinner } from 'react-bootstrap';
 import StoreContext from '../../contexts/store-context';
 import usePromise from '../../hooks/use-promise';
-import EntityEditForm from '../../components/item-edit-form';
+import ItemEditForm from '../../components/item-edit-form';
 import './item-create-page.scss';
 
 
@@ -32,7 +32,7 @@ function ItemCreatePage() {
   return (
     <div className="item-create-page">
 
-      <EntityEditForm
+      <ItemEditForm
         schema={entity.schema}
         onSubmit={handleSubmit}
       />

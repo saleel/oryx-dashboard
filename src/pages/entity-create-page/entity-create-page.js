@@ -80,28 +80,6 @@ function EntityCreatePage() {
   };
 
 
-  function handleChange(data) {
-    const { name = '', description = '' } = data;
-
-    const id = name.split(' ').join('_').toLowerCase();
-
-    const properties = propsArrayToObject(data.properties);
-
-    const transformedData = {
-      id,
-      name,
-      schema: {
-        title: name,
-        description,
-        type: 'object',
-        properties,
-      },
-    };
-
-    // console.log(JSON.stringify(transformedData.schema, null, 2));
-  }
-
-
   function propsArrayToObject(propsArray = []) {
     const properties = propsArray.reduce((acc, prop) => {
       const {
@@ -188,7 +166,6 @@ function EntityCreatePage() {
       <ItemEditForm
         schema={schema}
         onSubmit={handleSubmit}
-        onChange={handleChange}
       />
 
     </div>

@@ -21,11 +21,11 @@
     }
   }
 
-  &__enum {
+  &__array {
     padding: 0rem 0.5rem;
   }
 
-  &__enum-item {
+  &__array-item {
     padding: 0 0.1rem;
     margin: 0 0.25rem;
     background-color: #93aecc;
@@ -40,7 +40,7 @@
     }
   }
 
-  &__enum-delete {
+  &__array-delete {
     padding: 0;
     margin: 0;
     background-color: #e3e3e3;

@@ -11,6 +11,8 @@ class DataManager {
     this.createEntity = this.createEntity.bind(this);
     this.findItems = this.findItems.bind(this);
     this.createItem = this.createItem.bind(this);
+    this.getItem = this.getItem.bind(this);
+    this.updateItem = this.updateItem.bind(this);
   }
 
   async getEntity(entityId) {
@@ -35,6 +37,16 @@ class DataManager {
 
   async createItem({ entityId, data }) {
     const response = await this.axios.post(`/${entityId}`, data);
+    return response.data;
+  }
+
+  async getItem({ entityId, itemId }) {
+    const response = await this.axios.get(`/${entityId}/${itemId}`);
+    return response.data;
+  }
+
+  async updateItem({ entityId, itemId, data }) {
+    const response = await this.axios.patch(`/${entityId}/${itemId}`, data);
     return response.data;
   }
 }
