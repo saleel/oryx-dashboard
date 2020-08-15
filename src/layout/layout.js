@@ -13,37 +13,44 @@ const Layout = (props) => {
     <div className="layout">
 
       <div className="layout__header">
-        <Navbar className="layout__brand" bg="white">
-          <Container>
-            <Navbar.Brand href="/">Oryx Dashboard</Navbar.Brand>
-            <Nav className="ml-auto">
-              <div>User Name</div>
-            </Nav>
-          </Container>
-        </Navbar>
-
-        <Navbar className="layout__menu" bg="white">
-          <Container>
-            <Link to="/">Home</Link>
-            {entities.map((entity) => (
-              <Link key={entity.id} to={`/${entity.id}`}>
-                {entity.name}
-              </Link>
-            ))}
-            <Link to="/entity/new">New Entity</Link>
-          </Container>
+        <Navbar className="layout__top-bar" bg="primary">
+          <Link className="layout__logo" to="/">Oryx Dashboard</Link>
+          <Nav className="ml-auto">
+            <div>User Name</div>
+          </Nav>
         </Navbar>
       </div>
 
-      <main className="layout__content">
-        <Container>
-          <h2 className="layout__page-title">
-            {pageTitle}
-          </h2>
+      <div className="layout__body">
 
-          {children}
-        </Container>
-      </main>
+        <nav className="layout__sidebar d-none d-md-block">
+          <Nav defaultActiveKey="/home" className="flex-column">
+            <Link className="layout__menu-link" to="/">Home</Link>
+            <Link className="layout__menu-link" to="/users">Users</Link>
+            <hr />
+            {entities.filter((e) => e.id !== 'users').map((entity) => (
+              <Link className="layout__menu-link" key={entity.id} to={`/${entity.id}`}>
+                {entity.name}
+              </Link>
+            ))}
+            <hr />
+            <Link className="layout__menu-link" to="/entity/new">New Entity</Link>
+          </Nav>
+        </nav>
+
+        <main role="main" className="layout__content">
+          <Container>
+            <>
+              <h2 className="layout__page-title">
+                {pageTitle}
+              </h2>
+
+              {children}
+            </>
+          </Container>
+        </main>
+
+      </div>
 
     </div>
   );

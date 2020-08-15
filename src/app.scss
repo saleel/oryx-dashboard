@@ -1,16 +1,40 @@
-$enable-rounded: false;
+$enable-rounded: true;
 $btn-font-weight: 600;
+
+$theme-colors: (
+  "primary": #3f51b5,
+  "danger": #ff4136,
+  "secondary": #f8fafc,
+);
 
 @import "~bootstrap/scss/bootstrap";
 
+:root {
+  font-weight: 400;
+  font-size: 14px;
 
-.card {
-  border: 1px solid #ced4da;
+  --primary-bg: #eaf0f5;
+  --primary-text: #273035;
+  --border-color: #e1e1e1;
+  --sidebar-color: #ffffff;
+
+  
 }
 
-:root {
-  --bg-color: #EDEFF6;
-  --border-color: #e1e1e1;
+html, body {
+  background-color: var(--primary-bg);
+  color: var(--primary-text);
 
-  --color-purple: $purple;
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+  cursor: default;
+}
+
+#root {
+  height: 100%;
 }

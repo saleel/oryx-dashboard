@@ -28,32 +28,32 @@ function EntityPage() {
 
   return (
     <div className="entity-page">
-      <Card className="p-4">
+      {/* <Card className="p-4"> */}
 
-        <div className="row d-flex justify-content-between">
-          <SearchInput
-            className="col-xs-12 col-md-6 col-lg-4 mb-4"
-            placeholder={`Search ${pluralName}`}
-          />
-
-          <div className="col-xs-12 col-md-6 justify-content-end d-flex w-100 mb-4">
-            <Link
-              className="btn btn-md btn-outline-primary"
-              to={`/${id}/new`}
-            >
-              Add
-              {' '}
-              {name}
-            </Link>
-          </div>
-        </div>
-
-        <ItemList
-          entity={entity}
-          getData={({ skip, limit }) => findItems({ entityId: entity.id, skip, limit })}
+      <div className="row d-flex justify-content-between">
+        <SearchInput
+          className="col-xs-12 col-md-6 col-lg-4 mb-4"
+          placeholder={`Search ${pluralName}`}
         />
 
-      </Card>
+        <div className="col-xs-12 col-md-6 justify-content-end d-flex w-100 mb-4">
+          <Link
+            className="btn btn-md btn-outline-primary"
+            to={`/${id}/new`}
+          >
+              Add
+            {' '}
+            {name}
+          </Link>
+        </div>
+      </div>
+
+      <ItemList
+        entity={entity}
+        getData={({ skip, limit }) => findItems({ entityId: entity.id, skip, limit })}
+      />
+
+      {/* </Card> */}
     </div>
   );
 }

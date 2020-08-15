@@ -4,8 +4,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Card as div, Table, Pagination } from 'react-bootstrap';
 import EditIcon from '@iconscout/react-unicons/icons/uil-edit';
-import './item-list.scss';
 import { Link } from 'react-router-dom';
+import './item-list.scss';
 
 
 /**
@@ -76,7 +76,7 @@ function ItemList(props) {
 
   return (
     <div className="item-list">
-      <Table responsive borderless hover striped>
+      <Table responsive borderless>
 
         <thead>
           <tr>
